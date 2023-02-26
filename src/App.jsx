@@ -1,5 +1,6 @@
 import Nav from "./components/Nav";
 import MovieList from "./components/MovieList";
+import MovieForm from "./components/MovieForm";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useState } from "react";
 
@@ -21,9 +22,10 @@ function App() {
 
   return (
     <>
-      <Nav navItems={[{  }]} />
+      <Nav navItems={[{ href: "#add", displayText: "Add movie" }]} />
       <main className="container">
         <MovieList onMount={listMovies} movies={movies} />
+        <MovieForm onSuccess={listMovies} />
       </main>
     </>
   );
