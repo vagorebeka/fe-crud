@@ -26,11 +26,12 @@ function MovieForm(props) {
         }).then(async (response) => {
             if (response.status === 201) {
                 onSuccess();
-                setTitle();
+                /*setTitle();
                 setLength();
                 setRating();
                 setRating();
-                setErrorMessage("");
+                setErrorMessage("");*/
+                formReset();
             } else if (response.status === "404") {
                 setErrorMessage("Page not found");
             } else {
@@ -46,9 +47,10 @@ function MovieForm(props) {
         setLength("");
         setRating("");
         setCategory("");
+        setErrorMessage("");
     };
 
-    return (<section id="add">
+    return (<section id="add" className="mt-3">
         <h2>Add new movie</h2>
         {errorMessage !== "" ? (
             <div
