@@ -1,5 +1,5 @@
 function MovieCard(props) {
-    const { movie, afterDelete } = props;
+    const { movie, afterDelete, editClick } = props;
     const { id, title, length, rating, category } = movie;
     const deleteMovie = () => {
         fetch(`https://retoolapi.dev/ZZ9shj/movies/${id}`, {
@@ -41,7 +41,7 @@ function MovieCard(props) {
             </div>
             <div className="card-footer">
                 <div className="row row-cols-2">
-                    <a href="#add" className="btn btn-secondary col">Edit</a>
+                    <a href="#add" className="btn btn-secondary col" onClick={() => { editClick(id); }}>Edit</a>
                     <button className="btn btn-danger col" onClick={() => { deleteMovie(); }}>Delete</button>
                 </div>
             </div>

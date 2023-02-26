@@ -1,13 +1,36 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import FormInput from "./FormInput";
 
 function MovieForm(props) {
-    const { onSuccess } = props;
+    const { onSuccess, editableId = 0, resetEditable } = props;
     const [title, setTitle] = useState("");
     const [length, setLength] = useState("");
     const [rating, setRating] = useState("");
     const [category, setCategory] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+
+    useEffect(() => {
+        if (editableId === 0) {
+            formReset();
+        } else {
+            fetch(`https://retoolapi.dev/ZZ9shj/movies/${editableId}`, {
+                headers: {
+                    Accept: "application/json",
+                },
+            }).then(async (response) => {
+                const data = await response.json();
+                if (response.status !== 200) {
+                    //alert(data.message);
+                } else {
+                    setTitle(data.title);
+                    setLength(data.length);
+                    setRating(data.rating);
+                    setCategory(data.category);
+                    //setErrorMessage("");
+                }
+            });
+        }
+    }, [editableId]);
 
     const addMovie = () => {
         const movie = {
@@ -29,9 +52,37 @@ function MovieForm(props) {
                 /*setTitle();
                 setLength();
                 setRating();
-                setRating();
+                setCategory();
                 setErrorMessage("");*/
                 formReset();
+            } else if (response.status === "404") {
+                setErrorMessage("Page not found");
+            } else {
+                const jsonData = await response.json();
+                const errorMessage = jsonData.message;
+                setErrorMessage(errorMessage);
+            }
+        });
+    };
+
+    const editMovie = () => {
+        const movie = {
+            title: title,
+            length: length,
+            rating: rating,
+            category: category,
+        };
+        fetch(`https://retoolapi.dev/ZZ9shj/movies/${editableId}`, {
+            method: "PUT",
+            body: JSON.stringify(movie),
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+        }).then(async (response) => {
+            if (response.status === 200) {
+                onSuccess();
+                resetEditable();
             } else if (response.status === "404") {
                 setErrorMessage("Page not found");
             } else {
@@ -51,7 +102,11 @@ function MovieForm(props) {
     };
 
     return (<section id="add" className="mt-3">
-        <h2>Add new movie</h2>
+        {editableId === 0 ? (
+            <h2>Add new movie</h2>
+        ) : (
+            <h2>Edit {title}</h2>
+        )}
         {errorMessage !== "" ? (
             <div
                 className="alert alert-danger alert-dismissible fade show"
@@ -67,8 +122,13 @@ function MovieForm(props) {
             </div>
         ) : ("")}
         <form onSubmit={(event) => {
-          event.preventDefault();
-          addMovie();}}>
+            event.preventDefault();
+            if (editableId === 0) {
+                addMovie();
+            } else {
+                editMovie();
+            }
+        }}>
             <FormInput
                 inputId={"titleInput"}
                 inputLabel={"Title"}
@@ -95,8 +155,24 @@ function MovieForm(props) {
                 value={category}
                 setValue={setCategory}
             />
-            <button className="btn btn-success" type="submit">
-                Add movie
+            {editableId === 0 ? (
+                <button className="btn btn-success" type="submit">
+                    Add
+                </button>
+            ) : (
+                <button className="btn btn-warning" type="submit">
+                    Edit
+                </button>
+            )}
+            <button
+              className="btn btn-danger"
+              type="reset"
+              onClick={() => {
+                formReset();
+                resetEditable();
+              }}
+            >
+              Reset form
             </button>
         </form>
     </section>);

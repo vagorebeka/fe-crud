@@ -2,13 +2,13 @@ import { useEffect } from "react";
 import MovieCard from "./MovieCard";
 
 function MovieList(props) {
-  const { movies, onMount, modifyClick } = props;
+  const { movies, onMount, editClick } = props;
   useEffect(() => {
     onMount();
   }, []);
   const cardList = [];
   movies.forEach((movie) => {
-    cardList.push(<MovieCard key={movie.id} movie={movie} afterDelete={onMount} modifyClick={modifyClick} />);
+    cardList.push(<MovieCard key={movie.id} movie={movie} afterDelete={onMount} editClick={editClick} />);
   });
   return (
     <section>

@@ -2,7 +2,7 @@ function FormInput(props) {
     const { inputId, inputType = "text", inputLabel, value, setValue } = props;
     return (
     <div className="mb-3">
-        <label className="form-label" htmlFor="inputId">{inputLabel}</label>
+        <label className="form-label" htmlFor={inputId}>{inputLabel}</label>
         <input
             className="form-control"
             id={inputId}
