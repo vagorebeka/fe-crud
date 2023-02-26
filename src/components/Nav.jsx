@@ -12,6 +12,12 @@ function Nav(props) {
       />
     );
   });
+  navList.push(
+    <NavItem
+      key="https://github.com/vagorebeka/vagorebeka-fe-crud"
+      href="https://github.com/vagorebeka/vagorebeka-fe-crud"
+      displayText="GitHub"
+    />);
   return (
     <nav className="navbar navbar-expand-lg bg-light">
       <div className="container">
